@@ -1,0 +1,97 @@
+from selenium import webdriver
+from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.common.by import By
+
+
+
+
+class Launch_Indiagov():
+    
+    
+    def Launch_apps(self):
+        
+        self.driver = webdriver.Firefox()
+        self.driver.get("https://indianfrro.gov.in/frro/FormC/accom_reg.jsp?t4g=4ZK45F08")
+        self.driver.maximize_window()
+        
+        str_title = self.driver.title
+        assert "User Registration Page" in str_title
+        print("Correct title of page:",str_title)
+        
+    def user_registration(self):
+        
+        # Enter User information
+        self.driver.find_element_by_css_selector("#u_id").send_keys("rityity12345")
+        self.driver.find_element_by_css_selector("#u_pwd").send_keys("Abcd@1234")
+        self.driver.find_element_by_css_selector("#u_repwd").send_keys("Abcd@1234")
+        
+        select = Select (self.driver.find_element_by_css_selector("#u_secques"))
+        select.select_by_value("1")
+        
+        self.driver.find_element_by_css_selector("#u_secans").send_keys("abcd")
+        self.driver.find_element_by_css_selector("#u_name").send_keys("Abcd")
+        
+        select_gender = Select (self.driver.find_element_by_css_selector("#u_gender"))
+        select_gender.select_by_value("M")
+        
+        self.driver.find_element_by_css_selector("#CALBUTTONu_dob").click()
+        self.driver.find_element_by_css_selector("#CALDAY2").click()
+        self.driver.find_element_by_css_selector("#u_designation").send_keys("ABC")
+        
+        self.driver.implicitly_wait(2000)
+        
+        self.driver.find_element_by_css_selector("#u_emailid").send_keys("abcd@xyz.com")
+        self.driver.find_element_by_css_selector("#u_mobile").send_keys("9028807597")
+        self.driver.find_element_by_css_selector("#u_phone").send_keys("020-67948947")
+        
+        select_country = Select (self.driver.find_element_by_css_selector("#u_nationality"))
+        select_country.select_by_value("IND")
+        
+        self.driver.find_element_by_css_selector("#name").send_keys("Hotel A1")
+        self.driver.find_element_by_css_selector("#capacity").send_keys("4")
+        self.driver.find_element_by_css_selector("#address").send_keys("Address 132")
+        
+        sel_state = Select (self.driver.find_element_by_css_selector("#state"))
+        sel_state.select_by_value("18")
+        self.driver.implicitly_wait(2000)
+        try:
+            wait = WebDriverWait(self.driver,2).until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR,"#city_distr")))
+            wait.click()
+        finally:
+            print("element to be clicked...")                 
+        sel_city = Select (self.driver.find_element_by_css_selector("#city_distr"))
+        sel_city.select_by_value("30D")
+        self.driver.implicitly_wait(2000)
+        
+        city_type = Select (self.driver.find_element_by_css_selector("#frrodata"))
+        city_type.select_by_value("S225")
+        
+        sel_acco = Select (self.driver.find_element_by_css_selector("#acco_type"))
+        sel_acco.select_by_value("D")
+        
+        acco_type = Select (self.driver.find_element_by_css_selector("#star_rat"))
+        acco_type.select_by_value("2s")
+        
+        self.driver.find_element_by_css_selector("#contact").send_keys("0123-7845652")
+        self.driver.find_element_by_xpath("//table[1]/tbody/tr[2]/td[7]/input").send_keys("9854256320")
+        self.driver.find_element_by_xpath("//tbody/tr[29]/td/table[2]/tbody/tr/td[2]/input").click()
+        
+        
+        
+        
+from application_lib import Launch_Indiagov
+
+    if __name__== "__main__":
+    obj = Launch_Indiagov()
+    obj.Launch_apps()
+    obj.user_registration()
+        
+        
+        
+        
+        
+        
+        
+        
