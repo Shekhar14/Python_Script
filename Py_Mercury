@@ -1,0 +1,136 @@
+import unittest
+from selenium import webdriver
+from selenium.webdriver.support.select import Select
+from optparse import _parse_int
+from test.test_typechecks import Integer
+from string import punctuation
+
+class Home_page(unittest.TestCase):
+    
+    def launch(self):
+        self.driver = webdriver.Firefox()
+        self.driver.get("http://newtours.demoaut.com/")
+        self.driver.maximize_window()
+        str_title = self.driver.title
+        assert "Welcome: Mercury Tours" in str_title
+        print("Title of Page:",str_title)
+    
+    def registration(self):
+        self.driver.find_element_by_link_text("REGISTER").click()
+        print("Successfully click on Register link...")
+        self.driver.find_element_by_xpath("//td/form/table/tbody/tr[2]/td[2]/input").send_keys("shekhar")
+        self.driver.find_element_by_xpath("//td/form/table/tbody/tr[3]/td[2]/input").send_keys("firke")
+        self.driver.find_element_by_xpath("//td/form/table/tbody/tr[7]/td[2]/input").send_keys("address1")
+        country = Select(self.driver.find_element_by_xpath("//td/form/table/tbody/tr[12]/td[2]/select"))
+        country.select_by_value("6")
+        self.driver.find_element_by_xpath("//*[@id='email']").send_keys("shekhar141")
+        self.driver.find_element_by_xpath("//td/form/table/tbody/tr[15]/td[2]/input").send_keys("shekhar141")
+        self.driver.find_element_by_xpath("//td/form/table/tbody/tr[16]/td[2]/input").send_keys("shekhar141")
+        self.driver.find_element_by_xpath("//td/form/table/tbody/tr[18]/td/input").click()
+        
+    def signin(self):
+        self.driver.find_element_by_xpath("//td/table/tbody/tr[2]/td[2]/input").send_keys("shekhar141")
+        self.driver.find_element_by_xpath("//td/table/tbody/tr[3]/td[2]/input").send_keys("shekhar141")
+        submit_ele = self.driver.find_element_by_xpath("//td/table/tbody/tr[4]/td[2]/div/input")
+        submit_ele.click()
+        
+        #self.assertTrue(submit_ele.is_selected())
+        
+    def flight_finder(self):
+        self.driver.find_element_by_xpath("//td/form/table/tbody/tr[2]/td[2]/b/font/input[2]").click()
+        passenger = Select(self.driver.find_element_by_xpath("//td/form/table/tbody/tr[3]/td[2]/b/select"))
+        passenger.select_by_value("2")
+        depart_from = Select(self.driver.find_element_by_xpath("//td/form/table/tbody/tr[4]/td[2]/select"))
+        depart_from.select_by_value("London")
+        on_month = Select(self.driver.find_element_by_xpath("//td/form/table/tbody/tr[5]/td[2]/select[1]"))
+        on_month.select_by_value("6")
+        on_date = Select(self.driver.find_element_by_xpath("//td/form/table/tbody/tr[5]/td[2]/select[2]"))
+        on_date.select_by_value("5")
+        arrive_to = Select(self.driver.find_element_by_xpath("//td/form/table/tbody/tr[6]/td[2]/select"))
+        arrive_to.select_by_value("Sydney")
+        return_month = Select(self.driver.find_element_by_xpath("//td/form/table/tbody/tr[7]/td[2]/select[1]"))
+        return_month.select_by_value("7")
+        return_date = Select(self.driver.find_element_by_xpath("//td/form/table/tbody/tr[7]/td[2]/select[2]"))
+        return_date.select_by_value("10")
+        self.driver.find_element_by_xpath("//td/form/table/tbody/tr[9]/td[2]/font/font/input[2]").click()
+        airline = Select(self.driver.find_element_by_xpath("//td/form/table/tbody/tr[10]/td[2]/select"))
+        airline.select_by_visible_text("Blue Skies Airlines")
+        self.driver.find_element_by_xpath("//td/form/table/tbody/tr[14]/td/input").click()   
+        #self.driver.get_screenshot_as_file("//Mercury_Project//src//screen1.jpeg")
+        self.driver.save_screenshot('screen1.jpeg')
+        
+    def verify_selectedfight(self):
+        print("Verify depart fight names....")
+        
+        str_departPlace = self.driver.find_element_by_xpath("//td/form/table[1]/tbody/tr[1]/td/table/tbody/tr[2]/td[1]/b/font").text
+        print("User selected Depart Place:",str_departPlace)
+        self.assertEqual(str_departPlace,"London to Sydney")
+        
+        str_departdate = self.driver.find_element_by_xpath("//td/form/table[1]/tbody/tr[1]/td/table/tbody/tr[2]/td[2]/b/font").text
+        print("User selected Depart date:",str_departdate)
+        self.assertEqual(str_departdate,"6/5/2017")
+        
+        self.driver.find_element_by_xpath("//td/form/table[1]/tbody/tr[5]/td[1]/input").click()
+        
+        str_flightName = self.driver.find_element_by_xpath("//td/form/table[1]/tbody/tr[5]/td[2]/font/b").text
+        print("User selected Flight Name:",str_flightName)
+        self.assertEqual(str_flightName,"Blue Skies Airlines 361")
+        
+        str_returnPlace = self.driver.find_element_by_xpath("//td/form/table[2]/tbody/tr[1]/td/table/tbody/tr[2]/td[1]/b/font").text
+        print("User selected Return Place:",str_returnPlace)
+        self.assertEqual(str_returnPlace,"Sydney to London")
+        
+        str_returndate = self.driver.find_element_by_xpath("//td/form/table[2]/tbody/tr[1]/td/table/tbody/tr[2]/td[2]/b/font").text
+        print("User selected Return date:",str_returndate)
+        self.assertEqual(str_returndate,"7/10/2017")
+        
+        self.driver.find_element_by_xpath("//td/form/table[2]/tbody/tr[7]/td[1]/input").click()
+        
+        str_flightreturn = self.driver.find_element_by_xpath("//td/form/table[2]/tbody/tr[7]/td[2]/font/b").text
+        print("USer Selected return flight:",str_flightreturn)
+        self.assertEqual(str_flightreturn,"Pangea Airlines 632")
+        
+        self.driver.find_element_by_xpath("//td[2]/table/tbody/tr[5]/td/form/p/input").click()
+    
+    
+    def bookflight(self):
+        
+        str_passenger = _parse_int(self.driver.find_element_by_xpath("//td/table/tbody/tr[7]/td[2]/font").text)
+        print("Passenger to book tickets:",str_passenger)
+        self.assertEqual(str_passenger,2)
+        
+        str_flightprice1 = _parse_int(self.driver.find_element_by_xpath("//td/table/tbody/tr[3]/td[3]/font").text)
+        print("Passenger 1st flight price:",str_flightprice1)
+        self.assertEqual(str_flightprice1,271)
+        
+        str_flightprice2 = _parse_int(self.driver.find_element_by_xpath("//td/table/tbody/tr[6]/td[3]/font").text)
+        print("Passenger 2nd flight price:",str_flightprice2)
+        self.assertEqual(str_flightprice2,282) 
+        
+        str_taxes = self.driver.find_element_by_xpath("//td/table/tbody/tr[8]/td[2]/font").text
+        no_punct = ""
+        for char in str_taxes:
+            if char not in punctuation:
+                no_punct = no_punct + char
+                 
+        
+        int_tax = _parse_int(no_punct)
+        print(int_tax)
+        Total_price = ((str_flightprice1+str_flightprice2)*str_passenger+int_tax)
+        
+        str_totalprice = self.driver.find_element_by_xpath("//td/table/tbody/tr[9]/td[2]/font/b").text
+        no_punct1 = ""
+        for char in str_totalprice:
+            if char not in punctuation:
+                no_punct1 = no_punct1 + char
+            
+            
+        int_total = _parse_int(no_punct1)
+        print(int_total) 
+        print("Total price of flight book:",int_total)
+        self.assertEqual(int_total,Total_price)
+        
+          
+    
+    def close(self):
+        self.driver.close()
